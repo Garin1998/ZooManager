@@ -15,7 +15,7 @@ services:
     volumes:
       - ./sql/db.sql:/docker-entrypoint-initdb.d/db.sql
   zoo-manager:
-    build: .
+    build: https://github.com/Garin1998/ZooManager.git
     image: zoo-manager:latest
     depends_on:
       - postgres-db
