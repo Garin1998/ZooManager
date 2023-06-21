@@ -15,7 +15,8 @@ services:
     volumes:
       - ./sql/db.sql:/docker-entrypoint-initdb.d/db.sql
   zoo-manager:
-    build: https://github.com/Garin1998/ZooManager.git
+    #build: https://github.com/Garin1998/ZooManager.git
+    build: .
     image: zoo-manager:latest
     depends_on:
       - postgres-db
@@ -27,3 +28,6 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
+      SECRET_KEY: 90d2575217ed1e2422a563b193027d55ad98a1407def3067f71c1a8e54858f81
+      EXPIRATION_KEY: 86400000
+
