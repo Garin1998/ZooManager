@@ -1,6 +1,6 @@
 package zoomanager.models;
 
-public enum Role {
+public enum ERole {
     ROLE_USER,
     ROLE_ADMIN
 }

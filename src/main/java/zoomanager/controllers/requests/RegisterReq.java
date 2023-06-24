@@ -1,7 +1,6 @@
 package zoomanager.controllers.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.naming.factory.SendMailFactory;
 
 public record RegisterReq(
         @JsonProperty("name")

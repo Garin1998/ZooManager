@@ -25,7 +25,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.role (
-    id uuid NOT NULL,
+    uuid uuid NOT NULL,
     name text
 );
 
@@ -37,9 +37,12 @@ ALTER TABLE public.role OWNER TO admin;
 --
 
 CREATE TABLE public.user_in_db (
-    id uuid NOT NULL,
+    uuid uuid NOT NULL,
     name text,
     password text,
+    email text,
+    first_name text,
+    last_name text,
     registration_timestamp timestamp without time zone
 );
 
@@ -51,8 +54,8 @@ ALTER TABLE public.user_in_db OWNER TO admin;
 --
 
 CREATE TABLE public.user_role (
-    user_id uuid,
-    role_id uuid
+    user_uuid uuid,
+    role_uuid uuid
 );
 
 
@@ -62,9 +65,7 @@ ALTER TABLE public.user_role OWNER TO admin;
 -- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.role (id, name) FROM stdin;
-78cb5e54-15a9-4c9e-9cd0-ef38089b5104	ROLE_ADMIN
-f0754716-f9fd-458c-8074-c606ee3e517c	ROLE_USER
+COPY public.role (uuid, name) FROM stdin;
 \.
 
 
@@ -72,7 +73,7 @@ f0754716-f9fd-458c-8074-c606ee3e517c	ROLE_USER
 -- Data for Name: user_in_db; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.user_in_db (id, name, password, registration_timestamp) FROM stdin;
+COPY public.user_in_db (uuid, name, password, email, first_name, last_name, registration_timestamp) FROM stdin;
 \.
 
 
@@ -80,7 +81,7 @@ COPY public.user_in_db (id, name, password, registration_timestamp) FROM stdin;
 -- Data for Name: user_role; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.user_role (user_id, role_id) FROM stdin;
+COPY public.user_role (user_uuid, role_uuid) FROM stdin;
 \.
 
 
@@ -89,7 +90,7 @@ COPY public.user_role (user_id, role_id) FROM stdin;
 --
 
 ALTER TABLE ONLY public.role
-    ADD CONSTRAINT role_pk PRIMARY KEY (id);
+    ADD CONSTRAINT role_pk PRIMARY KEY (uuid);
 
 
 --
@@ -97,7 +98,7 @@ ALTER TABLE ONLY public.role
 --
 
 ALTER TABLE ONLY public.user_in_db
-    ADD CONSTRAINT user_in_db_pk PRIMARY KEY (id);
+    ADD CONSTRAINT user_in_db_pk PRIMARY KEY (uuid);
 
 
 --
@@ -105,7 +106,7 @@ ALTER TABLE ONLY public.user_in_db
 --
 
 ALTER TABLE ONLY public.user_role
-    ADD CONSTRAINT user_role_role_null_fk FOREIGN KEY (role_id) REFERENCES public.role(id);
+    ADD CONSTRAINT user_role_role_null_fk FOREIGN KEY (role_uuid) REFERENCES public.role(uuid);
 
 
 --
@@ -113,7 +114,7 @@ ALTER TABLE ONLY public.user_role
 --
 
 ALTER TABLE ONLY public.user_role
-    ADD CONSTRAINT user_role_user_in_db_null_fk FOREIGN KEY (user_id) REFERENCES public.user_in_db(id);
+    ADD CONSTRAINT user_role_user_in_db_null_fk FOREIGN KEY (user_uuid) REFERENCES public.user_in_db(uuid);
 
 
 --

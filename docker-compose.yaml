@@ -3,31 +3,35 @@ services:
   postgres-db:
     container_name: postgres-db-ZooManager
     image: postgres:bullseye
+    env_file: ./.env
     restart: always
     ports:
-      - "5432:5432"
+      - ${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}
     deploy:
       mode: global
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: zoo_manager
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./sql/db.sql:/docker-entrypoint-initdb.d/db.sql
   zoo-manager:
     #build: https://github.com/Garin1998/ZooManager.git
     build: .
     image: zoo-manager:latest
+    env_file: ./.env
     depends_on:
       - postgres-db
     ports:
-      - "8080:8080"
+      - ${ZOO_MANAGER_LOCAL_PORT}:${ZOO_MANAGER_DOCKER_PORT}
+    volumes:
+      - .m2:/root/.m2
     environment:
-      POSTGRES_DB: zoo_manager
-      POSTGRES_HOST: postgres-db-ZooManager
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      SECRET_KEY: 90d2575217ed1e2422a563b193027d55ad98a1407def3067f71c1a8e54858f81
-      EXPIRATION_KEY: 86400000
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_DOCKER_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      EXPIRATION_KEY: ${EXPIRATION_KEY}
 

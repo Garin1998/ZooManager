@@ -2,15 +2,9 @@ package zoomanager.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import zoomanager.models.Role;
-
+import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Data
@@ -18,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Table(name = "user_in_db")
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -34,43 +28,13 @@ public class User implements UserDetails {
     private String lastName;
     @Column(name = "email")
     private String email;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_uuid"),
+            inverseJoinColumns = @JoinColumn(name = "role_uuid"))
+    private  Set<Role> userRoles;
     @Column(name = "registration_timestamp")
+    @CreationTimestamp
     private Timestamp registrationTimestamp;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getUsername() {
-        return name;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
