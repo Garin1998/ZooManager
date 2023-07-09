@@ -3,11 +3,15 @@ package zoomanager.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -16,25 +20,32 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid")
     private UUID uuid;
-    @Column(name = "name")
     private String name;
-    @Column(name = "password")
     private String password;
-    @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
     private String lastName;
-    @Column(name = "email")
     private String email;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_uuid"),
             inverseJoinColumns = @JoinColumn(name = "role_uuid"))
     private  Set<Role> userRoles;
-    @Column(name = "registration_timestamp")
     @CreationTimestamp
     private Timestamp registrationTimestamp;
 
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner(", ",getClass().getSimpleName() + "(",")");
+        return sj
+                .add("uuid = " + uuid)
+                .add("name = " + name)
+                .add("password = ***")
+                .add("firstName = ***")
+                .add("lastName = ***")
+                .add("email = ***")
+                .add("roles = " + userRoles)
+                .add("registrationTimestamp = " + registrationTimestamp)
+                .toString();
+    }
 }

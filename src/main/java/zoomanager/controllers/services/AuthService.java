@@ -1,6 +1,7 @@
 package zoomanager.controllers.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +23,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -34,7 +36,7 @@ public class AuthService {
     public AuthResponse register(RegisterReq request) {
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository
-                .findByRoleName(ERole.ROLE_USER)
+                .findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException("Role not Found"));
         roles.add(userRole);
 
@@ -47,6 +49,7 @@ public class AuthService {
                 .userRoles(roles)
                 .build();
         userRepository.save(user);
+        log.info("Registered successfully " + user);
         String token = jwtService.generateToken(userMapper.entityToDto(user));
         return new AuthResponse(token);
     }
@@ -63,6 +66,7 @@ public class AuthService {
                 request.name()).orElseThrow(() -> new UsernameNotFoundException("User not found")
         );
         String token = jwtService.generateToken(userMapper.entityToDto(user));
+        log.info("Authenticated successfully " + user);
         return new AuthResponse(token);
     }
 }

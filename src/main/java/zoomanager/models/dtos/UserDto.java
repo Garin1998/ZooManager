@@ -26,7 +26,7 @@ public record UserDto(
         return this
                 .roles
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name())).toList();
+                .map(role -> new SimpleGrantedAuthority(role.getName().name())).toList();
     }
 
     @Override

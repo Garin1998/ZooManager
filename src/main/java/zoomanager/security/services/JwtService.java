@@ -18,10 +18,16 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${security.jwt.secret-key}")
-    private String secretKey;
-    @Value("${security.jwt.expiration}")
-    private long jwtExpiration;
+    private final String secretKey;
+    private final long jwtExpiration;
+
+    public JwtService(
+            @Value("${security.jwt.secret-key}") String secretKey,
+            @Value("${security.jwt.expiration}") long jwtExpiration
+    ) {
+        this.secretKey = secretKey;
+        this.jwtExpiration = jwtExpiration;
+    }
 
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 import zoomanager.security.services.JwtService;
 
 import java.io.IOException;
@@ -35,8 +36,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token;
         String userName;
 
+        ContentCachingRequestWrapper wrapper = new ContentCachingRequestWrapper(request);
+
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(wrapper, response);
             return;
         }
 
@@ -51,10 +54,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(wrapper));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(wrapper, response);
     }
 }

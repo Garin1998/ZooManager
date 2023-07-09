@@ -1,16 +1,15 @@
 package zoomanager.models.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import zoomanager.models.ERole;
 
+import java.util.StringJoiner;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,12 +17,18 @@ import java.util.UUID;
 public class Role {
 
     @Id
-    @Column(name = "uuid")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID roleUuid;
+    private UUID uuid;
 
-    @Column(name = "name")
     @Enumerated(EnumType.STRING)
-    private ERole roleName;
+    private ERole name;
 
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner(", ",getClass().getSimpleName() + "(",")");
+        return sj
+                .add("uuid = " + uuid)
+                .add("name = " + name)
+                .toString();
+    }
 }
