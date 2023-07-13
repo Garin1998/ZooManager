@@ -1,8 +1,3 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5433/zoo_manager
-    username: admin
-    password: password
 security:
   jwt:
     secret-key: 90d2575217ed1e2422a563b193027d55ad98a1407def3067f71c1a8e54858f81

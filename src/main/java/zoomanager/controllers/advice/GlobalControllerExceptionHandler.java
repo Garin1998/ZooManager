@@ -8,7 +8,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import zoomanager.controllers.advice.errors.GenericErrorDto;
-import zoomanager.controllers.advice.errors.MethodArgumentNotValidErrorDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,7 @@ import static zoomanager.constants.ErrorMessageConstants.MALFORMED_JSON;
 public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MethodArgumentNotValidErrorDto> handleValidationExceptions(
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
@@ -30,7 +29,7 @@ public class GlobalControllerExceptionHandler {
         });
 
         log.error(String.format("Arguments from request are not valid. Message: %s", errors));
-        return ResponseEntity.badRequest().body(new MethodArgumentNotValidErrorDto(errors));
+        return ResponseEntity.badRequest().body(errors);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

@@ -3,17 +3,18 @@ package zoomanager.controllers.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import zoomanager.annotations.EmailNotExist;
 import zoomanager.annotations.UserNameNotExist;
 import zoomanager.annotations.ValidPassword;
 
+@Builder
 public record RegisterReq(
         @JsonProperty("name")
         @NotBlank(message = "Must be filled")
         @UserNameNotExist
         String name,
         @JsonProperty("password")
-        @NotBlank(message = "Must be filled")
         @ValidPassword
         String password,
         @JsonProperty("firstName")
